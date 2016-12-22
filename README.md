@@ -1,8 +1,9 @@
 # Million Song Dataset Data Exploration
 
 * Dataset retrieved from: http://labrosa.ee.columbia.edu/millionsong/
-* Helper Functions taken from: https://github.com/tbertinmahieux/MSongsDB/blob/master/PythonSrc/hdf5_getters.py
-* Unless otherwise indicated, all data is taken from the sample set
+* HDF5 getter functions provided/taken from: https://github.com/tbertinmahieux/MSongsDB/blob/master/PythonSrc/hdf5_getters.py
+* Unless otherwise indicated, all analysis is on the sample set
+* Written in python 2 due to inconsistencies with the python 3 version of the tables module and the hdf5 getter functions provided by Thierry Bertin-Mahieux.
 
 ## Initial Analysis
 
