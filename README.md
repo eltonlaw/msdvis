@@ -31,7 +31,7 @@ In ascending order, the years with the most songs sampled.
 ## Duration of Songs
 ![duration_fade_in-out](https://cloud.githubusercontent.com/assets/14999531/21753100/2ff79590-d5b3-11e6-8485-bff39b356f28.png)
 
-Plotted the song duration in black and overlayed the fade in and out in red.
+Plotted the song duration in black and overlayed the end of the fade in and start of fade out in red.
 
 # Citations
 
