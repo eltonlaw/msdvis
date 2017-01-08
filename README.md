@@ -26,6 +26,13 @@
 ## Normalized % Frequency for each year
 ![year frequency](https://cloud.githubusercontent.com/assets/14999531/20555335/826f03b0-b12f-11e6-89af-9a5e08b9627e.png)
 
+In ascending order, the years with the most songs sampled.
+
+## Duration of Songs
+![duration_fade_in-out](https://cloud.githubusercontent.com/assets/14999531/21753100/2ff79590-d5b3-11e6-8485-bff39b356f28.png)
+
+Plotted the song duration in black and overlayed the fade in and out in red.
+
 # Citations
 
 Thierry Bertin-Mahieux, Daniel P.W. Ellis, Brian Whitman, and Paul Lamere. 
