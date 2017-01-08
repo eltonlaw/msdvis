@@ -11,41 +11,53 @@ pd.set_option('display.max_rows', None)
 pd.set_option('display.max_columns', None)
 
 ### HELPER FUNCTIONS ###
-def read_csv():
+def read_csv(path):
     df = pd.read_csv("./csv/data.csv")
+    return df
 
 ### DATA ###
-data.get_data()
 
-def basic_info(df,categories=["tempo","duration","key","time_signature","song_hotness"]):
+def basic_info(categories=["tempo","duration","key","time_signature","song_hotness"],saved_csv=None):
     print "basic_info() called"
+    if saved_csv: 
+        df = pd.read_csv(saved_csv)
+    else:
+        df = get_data(categories,write=True)
     start_time = time.time()
-    df[categories].describe()
-    skew = df[categories].skew()
-    correlations = df[categories].corr()
+    df.describe()
+    skew = df.skew()
+    correlations = df.corr()
     print "Finished. Time elapsed: {0}".format(time.time() - start_time)
 
-def plot_freq(df,category="year"):
+def plot_freq(category="year",saved_csv=None):
     print "plot_freq() called"
+    if saved_csv: 
+        df = pd.read_csv(saved_csv)
+    else:
+        df = get_data([category],write=True)
     start_time = time.time()
-    df_cat= df[df[category] != 0].dropna()
-    df_cat = df_year[category]
-    cat_counts=df_cat.value_counts(normalize=True,ascending=True)
+    df_clean= df[df != 0].dropna() # Drop NA values and 0 values
+    cat_counts=df_clean[category].value_counts(normalize=True,ascending=True)
     cat_counts.plot(kind="bar")
     title = "Overall Output % by '" + category + "'"
-    plt.title(title) # Missing data = 53.20% 
+    plt.title(title) 
     plt.tick_params(axis="x",labelsize=6)
     filename = category+"_frequency.png"
     plt.savefig(filename,bbox_inches="tight")
     plt.clf()
     print "Finished. Time elapsed: {0}".format(time.time() - start_time)
 
-def plot_world(df):
+def plot_world(saved_csv=None):
     print "plot_world() called"
+    categories=["artist_latitude","artist_longitude"]
+    if saved_csv: 
+        df = pd.read_csv(saved_csv)
+    else:
+        df = get_data(categories,write=True)
     start_time = time.time()
-    df_locs =df[["latitude","longitude"]].dropna(axis=0) # Delete rows with no values in lat/long
+    df_locs =df[categories].dropna(axis=0) # Delete rows with no values in lat/long
     df_locs = df_locs[df_locs.duplicated()] 
-    lat_lon = df_locs.as_matrix(columns=["latitude","longitude"])
+    lat_lon = df_locs.as_matrix(columns=categories)
     # Draw map
     from mpl_toolkits.basemap import Basemap
     m = Basemap(projection='mill',
@@ -62,8 +74,8 @@ def plot_world(df):
     for artist_lat,artist_lon in lat_lon:
         x_point,y_point = m(artist_lon,artist_lat)
         m.plot(x_point,y_point,"*",markersize = 10)
-    del lat_lon
     plt.title("Artist Locations")
     plt.savefig("artist_location.png",bbox_inches="tight")
     plt.clf()
-    print("Finished. Time elapsed: {0}".format(time.time() - start_time))
+    print "Finished. Time elapsed: {0}".format(time.time() - start_time)
+plot_world()
