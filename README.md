@@ -26,6 +26,19 @@
 ## Normalized % Frequency for each year
 ![year frequency](https://cloud.githubusercontent.com/assets/14999531/20555335/826f03b0-b12f-11e6-89af-9a5e08b9627e.png)
 
+In ascending order, the years with the most songs sampled.
+
+## Duration of Songs
+![duration_fade_in-out](https://cloud.githubusercontent.com/assets/14999531/21753100/2ff79590-d5b3-11e6-8485-bff39b356f28.png)
+
+Plotted the song duration in black and overlayed the end of the fade in and start of fade out in red.
+
+## Average Artist Hotness Over Time
+![Average Artist Hotness Over Time](https://cloud.githubusercontent.com/assets/14999531/21758068/caa63ff4-d605-11e6-8fa0-24ab67a33d79.png)
+
+Each raw datapoint represents a song. The blue line on the bottom represents the average "Artist Hotness" for each year we have raw datapoints for. Because some years are missing in between, the line is sporadic. The dotted black line represents the average of average "Artist Hotness". Green areas represent year ranges where the average for that year is above the average of the average. Red areas represent the opposite, where the average is below the average of the average.
+
+
 # Citations
 
 Thierry Bertin-Mahieux, Daniel P.W. Ellis, Brian Whitman, and Paul Lamere. 
