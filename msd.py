@@ -4,7 +4,7 @@ import pandas as pd
 sys.path.append("./MSongsDB/PythonSrc")
 import hdf5_getters
 
-def get_data(categories,path="./MillionSongSubset/data",write=False,write_path="./temp/data.csv"):
+def get_data(categories,path="./MillionSongSubset/data",write=False,write_path="./temp/data.csv",num_songs=10000):
     """ Pulls data from all h5 files on the provided path and all it's child nodes 
 
     Parameters 
@@ -25,7 +25,7 @@ def get_data(categories,path="./MillionSongSubset/data",write=False,write_path="
     """
     h5_files = [x   for x in os.walk(path)  if len(x[0]) == 30 ] # There's the conditional to differentiate between different directory structures, anything less than 30 means the path is referencing a parent directory
     data,count = [],0
-    for root,dirs,files in h5_files:
+    for root,dirs,files in h5_files[:num_songs]:
         for f in files:
             h5file = hdf5_getters.open_h5_file_read(os.path.join(root,f))
             datapoint = {}
