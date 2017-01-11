@@ -11,6 +11,8 @@
 
 ![correlation](https://cloud.githubusercontent.com/assets/14999531/20969484/27544d5e-bc57-11e6-9b66-f970332594be.png)
 
+The elements tested are linearly independent.
+
 ### Distribution
 
 ![distribution](https://cloud.githubusercontent.com/assets/14999531/20969483/2747d84e-bc57-11e6-97f2-f3762c45b8d6.png)
@@ -22,6 +24,8 @@
 ## Artist Locations from latitude/longitude 
 
 ![artist location](https://cloud.githubusercontent.com/assets/14999531/20470597/14aa9c6c-af78-11e6-8be5-fabc7a74490a.png)
+
+Most of the datapoints are coming from North America and EU, the subset data is not representative of the population. 
 
 ## Normalized % Frequency for each year
 ![year frequency](https://cloud.githubusercontent.com/assets/14999531/20555335/826f03b0-b12f-11e6-89af-9a5e08b9627e.png)
