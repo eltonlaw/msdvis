@@ -42,6 +42,10 @@ Plotted the song duration in black and overlayed the end of the fade in and star
 
 Each raw datapoint represents a song. The blue line on the bottom represents the average "Artist Hotness" for each year we have raw datapoints for. Because some years are missing in between, the line is sporadic. The dotted black line represents the average of average "Artist Hotness". Green areas represent year ranges where the average for that year is above the average of the average. Red areas represent the opposite, where the average is below the average of the average.
 
+## Segment Max Loudness
+![Error Bar for Max Loudness in each Segment](https://cloud.githubusercontent.com/assets/14999531/21872608/5d305796-d837-11e6-92bb-ba4ce6925b20.png)
+
+The full "segment_loudness_max" array contains 791 values for datapoint 0, this image shows the first 100 and the associated confidence values. 
 
 # Citations
 
