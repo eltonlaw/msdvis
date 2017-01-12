@@ -159,10 +159,58 @@ def compare_to_average(categories=["year","artist_hotttnesss"],saved_csv=None):
     ax2.plot(cat0,cat1_mean_list,"k--") # Plot line of average hotness over all years
     ax2.set_title("Averaged")
 
-    plt.ylabel("Artist Hotness")
     plt.xlabel("Year")
+    plt.ylabel("Artist Hotness")
     plt.savefig("averages.png",bbox_inches="tight")
     plt.clf()
     plt.legend()
     print "Done. Time elapsed: {0}".format(time.time() - start_time)
 
+def error_bar(categories=["segments_loudness_max","segments_confidence"],data_start_i=0,data_end_i=1,sec_start_i=0,sec_end_i=100,saved_csv=None):
+    """ Pulls categories from raw data and plots error bar 
+
+    Parameters 
+    ---------
+    categories: List/Strings (Must be 2D)
+        Strings are specific keywords. For a full list of available categories and more information: http://labrosa.ee.columbia.edu/millionsong/pages/example-track-description
+        categories[0]: y-value
+        categories[1]: y-value error
+    data_start_i: Int, optional
+        Start index value for pulling raw data
+        Defaults to 0
+    data_end_i: Int,optional
+        End index value for pulling raw data
+        Defaults to index value of last datapoint
+    sec_start_i: Int,optional
+        Start index value for segment to examine in each datapoint
+        Defaults to None (Entire segment)
+    sec_end_i: Int, optional
+        End index value for segment to examine in each datapoint
+        Defaults to None(Entire segment)
+    saved_csv: String,optional
+        Link to .csv file with raw data
+
+    Returns
+    ------
+    None, saves figures in working directory
+
+    """ 
+    if saved_csv: df = pd.read_csv(saved_csv)
+    else: df = get_data(categories,write=False,end_i=data_end_i)
+    start_time = time.time()
+
+
+    for j in range(data_end_i):
+        f = plt.figure(j)
+        plt.title("Song {0}[{1}:{2}]".format(j,sec_start_i,sec_end_i))
+        plt.xlabel("segment")
+        plt.ylabel(categories[0])
+        x = range(len(df[categories[0]][j]))[sec_start_i:sec_end_i]
+        y = df[categories[0]][j][sec_start_i:sec_end_i]
+        y_error = df[categories[1]][j][sec_start_i:sec_end_i]
+
+        plt.errorbar(x,y,yerr=y_error,marker="s")
+        filename = "error_bar_{0}.png".format(j)
+        plt.savefig(filename,bbox_inches="tight")
+    plt.clf()
+    print "Done. Time elapsed: {0}".format(time.time() - start_time)
