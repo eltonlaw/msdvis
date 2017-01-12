@@ -50,18 +50,32 @@ def freq_plot(category="year",saved_csv=None):
     plt.clf()
     print "Done. Time elapsed: {0}".format(time.time() - start_time)
 
-def world_plot(saved_csv=None):
-    """ Plots artists location on world map using latitude and longitude """
-    categories=["artist_latitude","artist_longitude"]
+def world_plot(lat="artist_latitude",lon="artist_longitude",saved_csv=None):
+    """ Plots artists location on world map using latitude and longitude 
+    
+    Parameters
+    ---------
+    lat: String
+        Category to pull latitude data. 
+    lon: String
+        Category to pull longitude data
+    saved_csv: String
+
+    Returns
+    -------
+    None, saves figure in working directory
+    
+    
+    """
     if saved_csv: 
         df = pd.read_csv(saved_csv)
     else:
-        df = get_data(categories,write=True)
+        df = get_data([lat,lon],write=True)
     start_time = time.time()
     
-    df_locs =df[categories].dropna(axis=0) # Delete rows with no values in lat/long
+    df_locs =df[[lat,lon]].dropna(axis=0) # Delete rows with no values in lat/long
     df_locs = df_locs[df_locs.duplicated()] 
-    lat_lon = df_locs.as_matrix(columns=categories)
+    lat_lon = df_locs.as_matrix(columns=[lat,lon])
     # Draw map
     from mpl_toolkits.basemap import Basemap
     m = Basemap(projection='mill',
@@ -79,29 +93,40 @@ def world_plot(saved_csv=None):
         x_point,y_point = m(artist_lon,artist_lat)
         m.plot(x_point,y_point,"*",markersize = 10)
     plt.title("Artist Locations")
-    
     plt.savefig("artist_location.png",bbox_inches="tight")
     plt.clf()
     print "Done. Time elapsed: {0}".format(time.time() - start_time)
 
-def hist_plot(category="time_signature"):
-    pass
+def stacked_bar_plot(full="duration",head_end="end_of_fade_in",tail_start="start_of_fade_out"],saved_csv=None):
+    """ Creates a stacked plot 
+    
+    Parameters
+    ---------
+    full: String
+        Data Category Name. Total size of barplot
+    head_end: String
+        Data Category Name. Bottom portion of stacked bar plot, represents the end value. 
+    tail_start: String
+        Data Category Name. Top portion of stacked bar plot, represents the starting value.
 
-def stacked_bar_plot(categories=["end_of_fade_in","duration","start_of_fade_out"],saved_csv=None):
-    """ Plots where the song is fading in and out in red and where the song is playing in blue"""
+    Returns
+    -------
+    None, saves figure in working directory
+
+    """
     if saved_csv: 
         df = pd.read_csv(saved_csv)
     else:
-        df = get_data(categories,write=True)
+        df = get_data([full,head_end,tail_start],write=True)
     start_time =time.time()
 
     df_clean = df.dropna(axis=0)
     df_cropped = df_clean[:100]
     ii = np.arange(0,df_cropped.shape[0])
 
-    fade_in = df_cropped[categories[0]]
-    fade_out = df_cropped[categories[1]].sub(df_cropped[categories[2]])
-    middle = df_cropped[categories[1]].sub(fade_in).sub(fade_out)
+    fade_in = df_cropped[head_end]
+    fade_out = df_cropped[full].sub(df_cropped[tail_start]) # To get value of start of tail to end of song
+    middle = df_cropped[full].sub(fade_in).sub(fade_out) # Full contains head and tail already so we need to subtract the amounts of head and tail to avoid double counting
     
     width = 0.5
     plt.bar(ii,fade_in,width,color="r")
@@ -117,8 +142,22 @@ def stacked_bar_plot(categories=["end_of_fade_in","duration","start_of_fade_out"
     plt.clf()
     print "Done. Time elapsed: {0}".format(time.time() - start_time)
 
-def compare_to_average(categories=["year","artist_hotttnesss"],saved_csv=None):
-    """ Plots raw data y, average y for each x and finds areas where average y for each x is above/below total average y"""
+def compare_to_average(x_cat="year",y_cat="artist_hotttnesss",saved_csv=None):
+    """ Plots raw data y, average y for each x and finds areas where average y for each x is above/below total average y
+        
+        Parameters
+        ----------
+        x_cat: String
+            X-axis variable. This category will act as the index.
+        y_cat: String
+            Y-axis variable. This category will be plotted in comparison with it's average
+        saved_csv: String
+
+        Returns
+        -------
+        None, saves figure in working directory
+
+    """
     if saved_csv: df = pd.read_csv(saved_csv)
     else: df = get_data(categories,write=True)
     start_time = time.time()
@@ -214,3 +253,6 @@ def error_bar(categories=["segments_loudness_max","segments_confidence"],data_st
         plt.savefig(filename,bbox_inches="tight")
     plt.clf()
     print "Done. Time elapsed: {0}".format(time.time() - start_time)
+
+def tsne(categories=[],saved_csv=None):
+    pass
