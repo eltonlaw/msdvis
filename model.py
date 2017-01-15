@@ -4,7 +4,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import sys
 sys.path.append("./")
-from msd import get_data
+from msd import get_song_data
+from sklearn.manifold import TSNE
 
 # Settings for ipython
 pd.set_option('display.max_rows', None)
@@ -15,7 +16,7 @@ def basic_info(categories=["tempo","duration","key","time_signature","song_hottt
     if saved_csv: 
         df = pd.read_csv(saved_csv)
     else:
-        df = get_data(categories,write=True)
+        df = get_song_data(categories,write=True)
     start_time = time.time()
     
     df.describe()
@@ -35,7 +36,7 @@ def freq_plot(category="year",saved_csv=None):
     if saved_csv: 
         df = pd.read_csv(saved_csv)
     else:
-        df = get_data([category],write=True)
+        df = get_song_data([category],write=True)
     start_time = time.time()
     
     df_clean= df[df != 0].dropna() # Drop NA values and 0 values
@@ -70,7 +71,7 @@ def world_plot(lat="artist_latitude",lon="artist_longitude",saved_csv=None):
     if saved_csv: 
         df = pd.read_csv(saved_csv)
     else:
-        df = get_data([lat,lon],write=True)
+        df = get_song_data([lat,lon],write=True)
     start_time = time.time()
     
     df_locs =df[[lat,lon]].dropna(axis=0) # Delete rows with no values in lat/long
@@ -97,7 +98,7 @@ def world_plot(lat="artist_latitude",lon="artist_longitude",saved_csv=None):
     plt.clf()
     print "Done. Time elapsed: {0}".format(time.time() - start_time)
 
-def stacked_bar_plot(full="duration",head_end="end_of_fade_in",tail_start="start_of_fade_out"],saved_csv=None):
+def stacked_bar_plot(full="duration",head_end="end_of_fade_in",tail_start="start_of_fade_out",saved_csv=None):
     """ Creates a stacked plot 
     
     Parameters
@@ -107,7 +108,7 @@ def stacked_bar_plot(full="duration",head_end="end_of_fade_in",tail_start="start
     head_end: String
         Data Category Name. Bottom portion of stacked bar plot, represents the end value. 
     tail_start: String
-        Data Category Name. Top portion of stacked bar plot, represents the starting value.
+        Top portion of stacked bar plot, represents the starting value.
 
     Returns
     -------
@@ -117,7 +118,7 @@ def stacked_bar_plot(full="duration",head_end="end_of_fade_in",tail_start="start
     if saved_csv: 
         df = pd.read_csv(saved_csv)
     else:
-        df = get_data([full,head_end,tail_start],write=True)
+        df = get_song_data([full,head_end,tail_start],write=True)
     start_time =time.time()
 
     df_clean = df.dropna(axis=0)
@@ -159,7 +160,7 @@ def compare_to_average(x_cat="year",y_cat="artist_hotttnesss",saved_csv=None):
 
     """
     if saved_csv: df = pd.read_csv(saved_csv)
-    else: df = get_data(categories,write=True)
+    else: df = get_song_data(categories,write=True)
     start_time = time.time()
 
     df_clean = df[df != 0].dropna()
@@ -235,7 +236,7 @@ def error_bar(categories=["segments_loudness_max","segments_confidence"],data_st
 
     """ 
     if saved_csv: df = pd.read_csv(saved_csv)
-    else: df = get_data(categories,write=False,end_i=data_end_i)
+    else: df = get_song_data(categories,write=False,end_i=data_end_i)
     start_time = time.time()
 
 
@@ -254,5 +255,26 @@ def error_bar(categories=["segments_loudness_max","segments_confidence"],data_st
     plt.clf()
     print "Done. Time elapsed: {0}".format(time.time() - start_time)
 
-def tsne(categories=[],saved_csv=None):
-    pass
+def dr(categories=[],saved_csv="./temp/song_data.csv"):
+    if saved_csv: df = pd.read_csv(saved_csv)
+    else: df = get_song_data(categories,write=True)
+
+    data = df.as_matrix()
+
+    start_time = time.time()
+    tsne = TSNE(n_components=2,random_state=1)
+    data_tsne = tsne.fit_transform(data)
+
+    plt.scatter(np.transpose(data_tsne)[0],np.transpose(data_tsne)[1])
+    filename = "tsne.png"
+    plt.savefig(filename,bbox_inches="tight")
+    plt.clf()
+
+    pca = PCA(n_components=2)
+    data_pca = pca.fit_transform(data)
+
+    plt.scatter(np.transpose(data_pca)[0],np.transpose(data_pca)[1])
+    filename = "pca.png"
+    plt.savefig(filename,bbox_inches="tight")
+    plt.clf()
+
