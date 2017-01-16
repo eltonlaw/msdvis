@@ -47,6 +47,11 @@ Each raw datapoint represents a song. The blue line on the bottom represents the
 
 The full "segment_loudness_max" array contains 791 values for datapoint 0, this image shows the first 100 and the associated confidence values. 
 
+## Dimensionality Reduction
+![PCA](https://cloud.githubusercontent.com/assets/14999531/21970558/5cd4bc9c-db75-11e6-89b3-f0faa08cab50.png)
+![TSNE](https://cloud.githubusercontent.com/assets/14999531/21970562/6e2ccd40-db75-11e6-8f79-35dcbb2b0549.png
+)
+
 # Citations
 
 Thierry Bertin-Mahieux, Daniel P.W. Ellis, Brian Whitman, and Paul Lamere. 
