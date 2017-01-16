@@ -52,6 +52,8 @@ The full "segment_loudness_max" array contains 791 values for datapoint 0, this 
 ![TSNE](https://cloud.githubusercontent.com/assets/14999531/21970562/6e2ccd40-db75-11e6-8f79-35dcbb2b0549.png
 )
 
+Result of going from 5 dimensions to 2 using the following categories: "key","loudness","mode","tempo","year". Used Principal Component Analysis and t-distributed Stochastic Neighbor Embedding.
+
 # Citations
 
 Thierry Bertin-Mahieux, Daniel P.W. Ellis, Brian Whitman, and Paul Lamere. 
