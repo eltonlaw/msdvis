@@ -1,5 +1,7 @@
 # Million Song Dataset Data Exploration
+Exploratory data analysis and visualization of the “Million Songs Dataset” mainly using Python, Pandas and Matplotlib.
 
+Notes:
 * Dataset retrieved from: http://labrosa.ee.columbia.edu/millionsong/
 * HDF5 getter functions provided/taken from: https://github.com/tbertinmahieux/MSongsDB/blob/master/PythonSrc/hdf5_getters.py
 * All analysis is on the sample set
