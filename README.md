@@ -7,7 +7,7 @@
 
 ## Setup
 
-If you want to follow along, 
+If you want to run the code: 
 ``` bash
 >>> git clone https://github.com/eltonlaw/msd_data_exploration.git
 ```
@@ -41,15 +41,15 @@ msd_data_exploration
 │       │   hdf5_descriptors.py
 │       │   hdf5_getters.py
 │       │   ...
-└───README.md
-└───scrape_categories.py
+|   README.md
+|   run.py
+|   scrape_categories.py
 └───temp
 ```
-
-## TO DO's
-* Setup .tar.gz unzipper
-* Currently entire dataset needs to be loaded into memory prior to doing any analysis 
-* Write hdf5 helper functions 
+Now you should be able to run the analysis with this command:
+``` bash
+python -m run.py
+```
 
 ## Initial Analysis
 ``` python
@@ -129,3 +129,9 @@ Plots dimensions reduced through T-SNE and PCA.
 Thierry Bertin-Mahieux, Daniel P.W. Ellis, Brian Whitman, and Paul Lamere. 
 The Million Song Dataset. In Proceedings of the 12th International Society
 for Music Information Retrieval Conference (ISMIR 2011), 2011.
+
+
+## TO DO's
+* Setup .tar.gz unzipper
+* Currently entire dataset needs to be loaded into memory prior to doing any analysis 
+* Write hdf5 helper functions 
