@@ -6,6 +6,7 @@ import sys
 sys.path.append("./")
 from msd import get_song_data
 from sklearn.manifold import TSNE
+from sklearn.decomposition import PCA
 
 # Settings for ipython
 pd.set_option('display.max_rows', None)
@@ -255,26 +256,43 @@ def error_bar(categories=["segments_loudness_max","segments_confidence"],data_st
     plt.clf()
     print "Done. Time elapsed: {0}".format(time.time() - start_time)
 
-def dr(categories=[],saved_csv="./temp/song_data.csv"):
-    if saved_csv: df = pd.read_csv(saved_csv)
-    else: df = get_song_data(categories,write=True)
 
-    data = df.as_matrix()
+def dr(x_categories=["key","loudness","mode","tempo","year"],y_category=["artist_mbtags","artist_mbtags_count"],saved_csv="./temp/song_data.csv"):
+    """Dimensionality Reduction using T-SNE and PCA"""
+    if saved_csv: df = pd.read_csv(saved_csv)
+    else: df = get_song_data(x_categories+y_category,write=True)
+
+    ## TO DO:
+    # Clean df, get indices of valid datapoints which you use for the X and Y. Make sure they're linked.
+    # Reduce the number of tags
+    # Plot t-sne based on tag and create a legend
+
+    # Clean df
+    df_y_clean = df_y[len(df_y[i]) == 0]
+    clean_indices = [...] # Indices of y_category that aren't empty
+    
+    # Condense each artist tag into just one entry
+    Y = [...] # Should be a list of tags, 1 for each song
+    Y_dr = [] # Reduce the amount of tags to a manegable amount
+    X = df[x_categories].as_matrix()
+    
 
     start_time = time.time()
     tsne = TSNE(n_components=2,random_state=1)
-    data_tsne = tsne.fit_transform(data)
+    X_tsne = tsne.fit_transform(X)
 
-    plt.scatter(np.transpose(data_tsne)[0],np.transpose(data_tsne)[1])
+    plt.scatter(np.transpose(X_tsne)[0],np.transpose(X_tsne)[1])
     filename = "tsne.png"
+    plt.title("T-SNE")
     plt.savefig(filename,bbox_inches="tight")
+    #plt.legend() # To indicate what colors correspond with what colors on the scatterplot
     plt.clf()
 
-    pca = PCA(n_components=2)
-    data_pca = pca.fit_transform(data)
+    pca = PCA(n_components=2,svd_solver="randomized",random_state=1)
+    X_pca = pca.fit_transform(X)
 
-    plt.scatter(np.transpose(data_pca)[0],np.transpose(data_pca)[1])
+    plt.scatter(np.transpose(data_pca)[0],np.transpose(data_pca)[1],)
     filename = "pca.png"
+    plt.title("PCA")
     plt.savefig(filename,bbox_inches="tight")
     plt.clf()
-
