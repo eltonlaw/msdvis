@@ -5,6 +5,8 @@ import pandas as pd
 import sqlite3
 sys.path.append("./MSongsDB/PythonSrc")
 import hdf5_getters
+import multiprocessing
+
 
 def get_song_data(categories,path="./MillionSongSubset/data",write=False,write_path="./temp/song_data.csv",start_i=0,end_i=10000):
     """ Pulls data from all h5 files on the provided path and all it's child nodes 
@@ -92,4 +94,3 @@ def get_meta_data(files=None,path="./MillionSongSubset/AdditionalFiles",write=Fa
             h5file = hdf5_getters.open_h5_file_read(file_path)
             data.append(h5file) 
             h5file.close()
-    return data

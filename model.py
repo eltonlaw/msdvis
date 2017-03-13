@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import sys
 sys.path.append("./")
-from msd import get_song_data
+from grab_data import get_song_data
 from sklearn.manifold import TSNE
 from sklearn.decomposition import PCA
 
@@ -16,6 +16,7 @@ def basic_info(categories=["tempo","duration","key","time_signature","song_hottt
     """ Prints skew and pairwise correlations of all categories"""
     if saved_csv: 
         df = pd.read_csv(saved_csv)
+        df = df[categories]
     else:
         df = get_song_data(categories,write=True)
     start_time = time.time()
@@ -36,6 +37,7 @@ def freq_plot(category="year",saved_csv=None):
     """ Plots frequency of category"""
     if saved_csv: 
         df = pd.read_csv(saved_csv)
+        df = df[categories]
     else:
         df = get_song_data([category],write=True)
     start_time = time.time()
@@ -71,6 +73,7 @@ def world_plot(lat="artist_latitude",lon="artist_longitude",saved_csv=None):
     """
     if saved_csv: 
         df = pd.read_csv(saved_csv)
+        df = df[categories]
     else:
         df = get_song_data([lat,lon],write=True)
     start_time = time.time()
@@ -118,6 +121,7 @@ def stacked_bar_plot(full="duration",head_end="end_of_fade_in",tail_start="start
     """
     if saved_csv: 
         df = pd.read_csv(saved_csv)
+        df = df["categories"]
     else:
         df = get_song_data([full,head_end,tail_start],write=True)
     start_time =time.time()
@@ -160,8 +164,12 @@ def compare_to_average(x_cat="year",y_cat="artist_hotttnesss",saved_csv=None):
         None, saves figure in working directory
 
     """
-    if saved_csv: df = pd.read_csv(saved_csv)
-    else: df = get_song_data(categories,write=True)
+
+    if saved_csv: 
+        df = pd.read_csv(saved_csv)
+        df = df[categories]
+    else:
+        df = get_song_data(categories,write=True)
     start_time = time.time()
 
     df_clean = df[df != 0].dropna()
@@ -207,7 +215,7 @@ def compare_to_average(x_cat="year",y_cat="artist_hotttnesss",saved_csv=None):
     plt.legend()
     print "Done. Time elapsed: {0}".format(time.time() - start_time)
 
-def error_bar(categories=["segments_loudness_max","segments_confidence"],data_start_i=0,data_end_i=1,sec_start_i=0,sec_end_i=100,saved_csv=None):
+def error_bar(categories=["segments_loudness_max","segments_confidence"],data_start=[0,1],sec_i=[0,100],saved_csv=None):
     """ Pulls categories from raw data and plots error bar 
 
     Parameters 
@@ -216,18 +224,12 @@ def error_bar(categories=["segments_loudness_max","segments_confidence"],data_st
         Strings are specific keywords. For a full list of available categories and more information: http://labrosa.ee.columbia.edu/millionsong/pages/example-track-description
         categories[0]: y-value
         categories[1]: y-value error
-    data_start_i: Int, optional
-        Start index value for pulling raw data
-        Defaults to 0
-    data_end_i: Int,optional
-        End index value for pulling raw data
-        Defaults to index value of last datapoint
-    sec_start_i: Int,optional
-        Start index value for segment to examine in each datapoint
-        Defaults to None (Entire segment)
-    sec_end_i: Int, optional
-        End index value for segment to examine in each datapoint
-        Defaults to None(Entire segment)
+    data_i: List, optional
+        Start/End index value for pulling raw data
+        Defaults to [0,1]
+    sec_i: List,optional
+        Start/End index value for segment to examine in each datapoint
+        Defaults to [0, 100]
     saved_csv: String,optional
         Link to .csv file with raw data
 
@@ -236,19 +238,22 @@ def error_bar(categories=["segments_loudness_max","segments_confidence"],data_st
     None, saves figures in working directory
 
     """ 
-    if saved_csv: df = pd.read_csv(saved_csv)
-    else: df = get_song_data(categories,write=False,end_i=data_end_i)
+    if saved_csv: 
+        df = pd.read_csv(saved_csv)
+        df = df[categories]
+    else: 
+        df = get_song_data(categories,write=False,end_i=data_i[1])
     start_time = time.time()
 
 
-    for j in range(data_end_i):
+    for j in range(data_i[1]):
         f = plt.figure(j)
-        plt.title("Song {0}[{1}:{2}]".format(j,sec_start_i,sec_end_i))
+        plt.title("Song {0}[{1}:{2}]".format(j,sec_i[0],sec_i[1]))
         plt.xlabel("segment")
         plt.ylabel(categories[0])
-        x = range(len(df[categories[0]][j]))[sec_start_i:sec_end_i]
-        y = df[categories[0]][j][sec_start_i:sec_end_i]
-        y_error = df[categories[1]][j][sec_start_i:sec_end_i]
+        x = range(len(df[categories[0]][j]))[sec_i[0]:sec_i[1]]
+        y = df[categories[0]][j][sec_i[0]:sec_i[1]]
+        y_error = df[categories[1]][j][sec_i[0]:sec_i[1]]
 
         plt.errorbar(x,y,yerr=y_error,marker="s")
         filename = "error_bar_{0}.png".format(j)
@@ -262,20 +267,11 @@ def dr(x_categories=["key","loudness","mode","tempo","year"],y_category=["artist
     if saved_csv: df = pd.read_csv(saved_csv)
     else: df = get_song_data(x_categories+y_category,write=True)
 
-    ## TO DO:
-    # Clean df, get indices of valid datapoints which you use for the X and Y. Make sure they're linked.
-    # Reduce the number of tags
-    # Plot t-sne based on tag and create a legend
-
     # Clean df
     df_y_clean = df_y[len(df_y[i]) == 0]
-    clean_indices = [...] # Indices of y_category that aren't empty
     
     # Condense each artist tag into just one entry
-    Y = [...] # Should be a list of tags, 1 for each song
-    Y_dr = [] # Reduce the amount of tags to a manegable amount
     X = df[x_categories].as_matrix()
-    
 
     start_time = time.time()
     tsne = TSNE(n_components=2,random_state=1)
