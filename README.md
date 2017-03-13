@@ -54,7 +54,7 @@ python -m run.py
 ``` bash
 >>> python scrape_categories.py 
 ```
-Columbia shows an example datapoint [here](https://labrosa.ee.columbia.edu/millionsong/pages/example-track-description). I wrote a simple web scraper using Beautiful Soup to print the categories + descriptions to avoid the hassle of going to the website each time. Ex. Output on Terminal
+Columbia shows an example datapoint [here](https://labrosa.ee.columbia.edu/millionsong/pages/example-track-description). I wrote a simple web scraper using Beautiful Soup to print the categories and descriptions to avoid the hassle of going to the website each time...example output in Terminal
 ![scraper](https://cloud.githubusercontent.com/assets/14999531/23847478/e851a4d8-07a8-11e7-8fdc-72e935c27a34.png)
 
 ## Initial Analysis
